@@ -3,9 +3,7 @@
 ## Elevating Fine Dining Through Technological Excellence
 
 Adam's Restaurant presents a sophisticated, integrated digital platform that transforms the traditional dining experience into a seamless blend of culinary artistry and technological innovation. Our bespoke solution enhances every aspect of Adam's renowned hospitality while preserving the personal touch that has made us a destination for discerning diners.
-
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.43.24.63.png)
-
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.40.45.11.png)
 ## Core Components
 
 ### Digital Showcase
@@ -52,7 +50,11 @@ Our digital platform enhances the renowned Adam's Restaurant experience:
 - **Culinary Focus**: Chef Adam leverages detailed analytics to continuously evolve our menu offerings
 - **Consistent Quality**: Our integrated systems ensure every dish meets our exacting standards
 - **Exclusive Experience**: Digital innovation complements our commitment to exceptional dining
-
-## Implementation
-
-For further information about Adam's Restaurant's digital transformation or to make a reservation, please visit our website or contact our concierge team.
+## Project Preview
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.43.24.63.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.11.94.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.53.21.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.46.27.78.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.47.15.62.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.49.34.70.png)
+![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.51.27.48.png)
