@@ -58,3 +58,9 @@ Our digital platform enhances the renowned Adam's Restaurant experience:
 ![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.47.15.62.png)
 ![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.49.34.70.png)
 ![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.51.27.48.png)
+## Contact
+For inquiries, reservations, or technical support, please reach out through any of our channels:
+
+WhatsApp: +212 6752-42283
+LinkedIn: https://www.linkedin.com/in/abdellah-jorf-7b94a835a/
+Email: abdellahjorf4@gmail.com
