@@ -1,0 +1,98 @@
+﻿@page "/Carte"
+@inject PlatService PlatService
+@inject CategoriePlatService CategoriePlatService
+@inject TableService TableService
+@inject PlatTableService PlatTableService
+@inject NavigationManager navigation
+<style>
+    * {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #eee;
+        overflow-x: hidden;
+        color: #800000;
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+
+</style>
+<div class="m">
+    <div class="NV">
+        <p>Adam's</p>
+        <button @onclick="GotoHome">Home Page</button>
+    </div>
+    <div class="h">
+
+        <h3>Découvrez Nos Délices:</h3>
+        
+        <h5>
+            Bienvenue Chez ADAM's!
+            <br />
+            Découvrez nos plats ci-dessous et laissez-vous tenter par une explosion de saveurs ! Chaque assiette est soigneusement préparée pour vous offrir une expérience culinaire mémorable. Parcourez notre menu et choisissez le plat qui vous fera voyager à chaque bouchée !
+            <br />
+            Bon appétit !
+        </h5>
+        <h2>Plats:</h2>
+    </div>
+    <div class="CatPlat">
+        <div class="Categorie">
+            @if (categoriePlats != null)
+            {
+                foreach (var cat in categoriePlats)
+                {
+                    <button @onclick="()=>CAT(cat.Id)" class="CatBTN">@cat.Nom</button>
+                }
+            }
+            <button @onclick="ShowAll" class="CatBTN">Afficher Tout</button>
+        </div>
+        <div class="Plats">
+            @if (filteredplats != null)
+            {
+                @foreach (var p in filteredplats)
+                {
+                    <div class="plat">
+                        <img src="/ImagePlats/@p.ImagePlat" />
+                        <p>@p.NomPlat</p>
+                        <p>Prix: @p.PrixPlat DH</p>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+    <Footer />
+</div>
+
+@code {
+    List<Plat> plats;
+    List<CategoriePlat> categoriePlats;
+    List<Plat> filteredplats;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        filteredplats = plats = await PlatService.GetPlatsAsync();
+        categoriePlats = await CategoriePlatService.GetCategoriePlatsAsync();
+        
+
+    }
+    public void CAT(int id)
+    {
+        filteredplats = plats.Where(c => c.categorie.Id == id).ToList();
+    }
+    public void ShowAll()
+    {
+        filteredplats = plats;
+    }
+    public void GotoHome()
+    {
+        navigation.NavigateTo("/");
+    }
+
+}

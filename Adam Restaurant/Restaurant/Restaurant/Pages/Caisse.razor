@@ -1,0 +1,555 @@
+﻿@page "/Caisse"
+@inject TableService TableService
+@inject CommandeCaissierService CommandeCaissierService
+@inject PlatTableService PlatTableService
+@inject TiquetService TiquetService
+
+<style>
+
+button {
+    padding: 0.8em 1.6em;
+    border: 1px solid #982B1C;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #982B1C;
+    font-weight: 400;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    button:hover {
+        background-color: #982B1C;
+        color: #F2E8C6;
+    }
+
+h2 {
+    color: #800000;
+    font-weight: 400;
+    font-size: 1.6em;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    position: relative;
+}
+h5 {
+    color: #800000;
+    font-weight: 400;
+    font-size: 1.2em;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    position: relative;
+}
+
+.Modelss {
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    align-content:center;
+    max-height: 50em;
+    gap: 2em;
+    padding: 1.5em;
+}
+
+.Tables {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 3em;
+    width: 60%;
+    height:70%;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+}
+
+    .m {
+        width: 100vw;
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        padding:  2em;
+    }
+
+    .Headerr {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+        .Headerr p {
+            padding: 0em 1em;
+            font-size: 1.2em;
+        }
+
+.AAA {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: center;
+    padding: 2em;
+}
+
+
+
+.ConfirmBTN {
+    width: max-content;
+    margin: 2em auto;
+    display: block;
+    font-size: 1em;
+    padding: 0.8em 2.5em;
+    background-color: #006622;
+    border-color: #006622;
+    color: #F2E8C6;
+}
+
+    .ConfirmBTN:hover {
+        background-color: transparent;
+        color: #006622;
+    }
+
+.tableBTN {
+    flex: 1 1 calc(20% - 10px);
+    max-width: calc(15% - 10px);
+    height: 3em;
+    border-radius: 2px;
+    border: none;
+    background-color: #006622;
+    color: #FFF;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+    .tableBTN:hover {
+        background-color: #006622;
+        transform: translateY(-3px);
+    }
+
+.btnFermer {
+    background-color: #cc0000;
+    border-color: #cc0000;
+    color: #F2E8C6;
+}
+
+    .btnFermer:hover {
+        background-color: transparent;
+        color: #cc0000;
+    }
+.btnSucc {
+    background-color: #006622;
+    border-color: #006622;
+    color: #F2E8C6;
+}
+
+    .btnSucc:hover {
+        background-color: transparent;
+        color: #006622;
+    }
+
+    .TotalTable{
+        background-color: #ffffff;
+        border-radius: 6px;
+        padding: 3em;
+        width: 40%;
+        height: 100%;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+    }
+
+    .M3, .M2, .M5 {
+        background-color: #fafafa;
+        border: none;
+        border-radius: 8px;
+        padding: 2em;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .M5 {
+        width: 50em;
+        height: 27em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2em;
+    }
+
+    .M3 {
+        width: 64em;
+        height: 40em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .M2 {
+        width: 32em;
+        height: 19em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .enc {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 1em 0;
+    }
+
+    .Infos {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8em;
+        align-items: center;
+        padding: 1em;
+        margin: 0 1.5em;
+        flex: 1;
+        min-width: 10em;
+    }
+
+    h2 {
+        position: relative;
+        margin-bottom: 1.5em;
+        text-align: center;
+        width: 100%;
+    }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: #333;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        h2:hover:after {
+            width: 60px;
+        }
+
+    h5 {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+        font-weight: 500;
+    }
+
+    input {
+        padding: 1em 1.5em;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 12em;
+        font-size: 0.9em;
+        text-align: center;
+        transition: border 0.2s ease;
+        outline: none;
+    }
+
+        input:focus {
+            border: 1px solid #333;
+        }
+
+    .btnss {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 100%;
+        gap: 1.5em;
+        margin-top: 1.5em;
+    }
+
+
+
+ 
+  
+    
+</style>
+<div class="m">
+    <div class="Headerr">
+        <h2>Caissier</h2>
+        <p>
+            Voici votre Tableau de bord de caisse. À gauche, vous trouverez la liste des tables occupées.
+            Cliquez sur une table pour afficher le détail de l'addition à droite.
+            Une fois la commande vérifiée, cliquez sur "Encaisser" pour procéder au paiement,
+            soit en espèces, soit par carte. Bon travail !
+            <br />
+            En cas de Probleme clickez sur le button <button @onclick="Fetch"></button> Pour Resoudre tout problemes
+        </p>
+    </div>
+    <div class="Modelss">
+        <div class="Tables">
+            <h2>Choisir Votre Table</h2>
+            <div class="AAA">
+                @if (tables != null)
+                {
+                    @foreach (var table in tables)
+                    {
+                        <button class="tableBTN" @onclick="()=>ChoisirTable(table)">
+                            @table.MatriculeTable
+                        </button>
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="TotalTable">
+            @if (tableChoisis != null)
+            {
+                <h2>Encaissement pour Table: @tableChoisis.MatriculeTable</h2>
+                <h3>Total Pour Table @tableChoisis.MatriculeTable  est: @PrixTotal DH</h3>
+                <button @onclick="OpenEncModal">Encaisser</button>
+            }
+            else
+            {
+                <h2>Veuillez Choisir une table</h2>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+@if (EncModal)
+{
+    <div class="backdrop"></div>
+    <div class="M2">
+        <div class=""> 
+            @if (tableChoisis != null)
+            {
+                <h2>Encaissement pour Table : @tableChoisis.MatriculeTable</h2>
+            }
+            else
+            {
+                <h2>Aucune table Choisis</h2>  
+            }
+
+        </div>
+       <div class="btnss">
+            <button @onclick="OpenEncCashModal" class="btnSucc">Espece</button>
+            <button @onclick="OpenEncCarteModal" class="btnSucc">Carte</button>
+       </div>
+        <div class="btnss">
+
+            <button class="btnFermer" @onclick="CloseALLModals">Fermer</button>
+        </div>
+    </div>
+}
+@if (EncCarteModal)
+{
+    <div class="backdrop"></div>
+    <div class="M2">
+        <div class="btnss">
+            @if (tableChoisis != null)
+            {
+                <h2>Encaissement pour Table : @tableChoisis.MatriculeTable</h2>
+            }
+            else
+            {
+                <h2>Aucune table Choisis</h2>
+            }
+        </div>
+       <div class="enc">
+            <button class="btnSucc" @onclick="EncaisserCarte">Encaisser</button>
+       </div>
+        <div class="btnss">
+            <button class="btnFermer" @onclick="CloseEncCarteModal">Fermer</button>
+        </div>
+    </div>
+}
+@if (EncCashModal)
+{
+    <div class="backdrop"></div>
+    <div class="M5">
+        <div class="">
+            @if (tableChoisis != null)
+            {
+                <h2>Encaissement pour Table : @tableChoisis.MatriculeTable</h2>
+            }
+            else
+            {
+                <h2>Aucune table Choisis</h2>
+            }
+        </div>
+
+        <div class="enc">
+            <div class="Infos">
+                <h5 style="color:red;">Total Commande</h5>
+                <p>@PrixTotal Dh</p>
+            </div>
+            <div class="Infos">
+                <h5 style="color:green;">Montant Donnée</h5>
+                <input @bind="inputDonne" placeholder="Montant Donné" />
+            </div>
+            <div class="Infos">
+                <h5 style="color:orange;">Reste</h5>
+                <p>@Reste Dh</p>
+            </div>
+   
+        </div>
+        <div class="btnss">
+            <button class="btnSucc" @onclick="EncaisserCash">Encaisser</button>
+            <button class="btnSucc" @onclick="CalculerReste">Calculer Reste</button>
+            <button class="btnFermer" @onclick="CloseEncCashModal">Fermer</button>
+        </div>
+    </div>
+}
+@code {
+    public List<Table> tables;
+    public Table? tableChoisis;
+    public double PrixTotal;
+    public double PrixDonne;
+    public double Reste;
+    public List<CommandeCaissier> commandes;
+    public List<CommandeCaissier> commandePourTable;
+    //
+    public bool EncModal = false;
+    public bool EncCashModal = false;
+    public bool EncCarteModal = false;
+    //
+    public string inputDonne = string.Empty;
+    //
+    public void OpenEncModal()
+    {
+        EncModal = true;
+        StateHasChanged();
+    }
+    public void CloseEncModal()
+    {
+        EncModal=false;
+    }
+    public void OpenEncCashModal()
+    {
+        EncCashModal = true;
+    }
+    public void CloseEncCashModal()
+    {
+        EncCashModal = false;
+    }
+    public void OpenEncCarteModal()
+    {
+        EncCarteModal = true;
+    }
+    public void CloseEncCarteModal()
+    {
+        EncCarteModal = false;
+    }
+    public void CloseALLModals()
+    {
+        EncCarteModal=false;
+        EncCashModal = false;
+        EncModal = false;
+    }
+
+    protected override  async Task OnInitializedAsync()
+    {
+        tables = await TableService.GetTablesAsync();
+        commandes = await CommandeCaissierService.GetCommandeCaissiersAsync();
+        PrixTotal = Reste=0;
+    }
+    public async Task Fetch()
+    {
+        tables = await TableService.GetTablesAsync();
+        commandes = await CommandeCaissierService.GetCommandeCaissiersAsync();
+        StateHasChanged();
+
+    }
+    public void ChoisirTable(Table t)
+    {
+        tableChoisis = t;
+        commandePourTable = commandes
+            .Where(c => c.table.Id == t.Id)
+            .ToList();
+
+        PrixTotal = commandePourTable.Sum(c => c.Total);
+        StateHasChanged();
+    }
+
+    private async Task DeleteCommandePourTable()
+    {
+        foreach(var t in commandes)
+        {
+            if (t.table.Id == tableChoisis.Id)
+            {
+                await CommandeCaissierService.DeleteCommandeCaissierAsync(t.Id);
+            }
+        }
+    }
+    public void CalculerReste()
+    {
+        double MontantDonnee = double.Parse(inputDonne);
+        Reste = MontantDonnee - PrixTotal;
+
+    }
+    public async Task EncaisserCash()
+    {
+        double MontantDonnee = double.Parse(inputDonne);
+        Tiquet tiquet = new Tiquet
+            {
+                ModePayment = ModePayment.Cash,
+                DateTiquet = DateTime.Now,
+                MontantDonne = MontantDonnee,
+                TotalTiquet = PrixTotal,
+                Reste = Reste,
+                table = tableChoisis
+            };
+        await TiquetService.CreateTiquetAsync(tiquet);
+        await DeleteCommandePourTable();
+        tableChoisis = null;
+        await Fetch();
+        CloseALLModals();
+    }
+    public async Task EncaisserCarte()
+    {
+
+        Tiquet tiquet = new Tiquet
+            {
+                ModePayment = ModePayment.Carte,
+                DateTiquet = DateTime.Now,
+                MontantDonne = PrixTotal,
+                TotalTiquet = PrixTotal,
+                Reste = 0,
+                table = tableChoisis
+            };
+        await TiquetService.CreateTiquetAsync(tiquet);
+        await DeleteCommandePourTable();
+        tableChoisis = null;
+        await Fetch();
+        CloseALLModals();
+    }
+
+}

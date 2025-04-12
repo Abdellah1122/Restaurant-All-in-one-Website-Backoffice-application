@@ -1,0 +1,193 @@
+﻿@page "/Reserver"
+@inject TableService TableService
+@inject TableChoisis TableChoisis
+@inject BookingService BookingService
+@inject ClientService ClientService
+@inject NavigationManager navigation
+@inject EmailService EmailService
+<style>
+    * {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #eee;
+        overflow-x: hidden;
+        color: #800000;
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+</style>
+
+<div class="m">
+    <div class="NV">
+        <p>Adam's</p>
+        <button @onclick="NavigateHome">Home Page</button>
+    </div>
+	<div class="Modelss">
+            <div class="Tables">
+            <h2>Choisir Votre Table</h2>
+            <div class="AAA">
+                @if (tables != null)
+                {
+                    @foreach (var table in tables)
+                    {
+                            <button @onclick="()=>ChoisirTable(table)" class="tableBTN">
+                                @table.MatriculeTable
+                            </button>
+                    }
+                }
+                
+            </div>
+            </div>
+            <div class="Inputs">
+            <h2>Veuillez remplir ce formulaire</h2>
+                    <div class="nomPrenom">
+                        <div>
+                            <label>Nom:</label>
+                            <input @bind="inputNom" />
+                        </div>
+                        <div>
+                            <label>Prenom:</label>
+                            <input @bind="inputPreNom" />
+                        </div>
+                    </div>
+                    <div>
+                        <label>Telephone:</label>
+                        <input @bind="inputPhone" />
+                    </div>
+                    <div>
+                        <label>Mail:</label>
+                        <input @bind="inputMail"/>
+                    </div>
+                <div class="time">
+                @if (TableChoisis.TbChoisis != null && !string.IsNullOrEmpty(inputMail) && !string.IsNullOrEmpty(inputNom) && !string.IsNullOrEmpty(inputPreNom) && !string.IsNullOrEmpty(inputPhone))
+                {
+
+                    <p>Table Choisis: @TableChoisis.TbChoisis.MatriculeTable</p>
+                    <MudDatePicker @bind-Date="_date" />
+                    <MudTimePicker @bind-Time="_time" />
+                    <button class="ConfirmBTN" @onclick="ValiderReservation">Valider</button>
+                    
+                }
+                else
+                {
+                    <h5>Choisissez une table et remplissez le formulaire pour finaliser votre réservation.</h5>
+                }  
+                </div>
+
+           
+            </div>
+    </div>
+	<Footer/>
+</div>
+
+@if (SucModal)
+{
+    <div class="backdrop"></div>
+    <div class="M2">
+        <div class="btnss">
+            <h2>Réservation effectuée avec succès !</h2>
+        </div>
+        <p>
+            Nous examinerons votre demande de réservation et vous contacterons par téléphone et par e-mail, que celle-ci soit acceptée ou non, dans les plus brefs délais.
+        </p>
+        <div class="btnss">
+            <button class="btnSucc" @onclick="NavigateHome">Home</button>
+            <button class="btnFermer"@onclick="CloseSucModal">Fermer</button>
+        </div>
+    </div>
+}
+@code {
+    private string inputNom;
+    private string inputPreNom;
+    private string inputMail;
+    private string inputPhone;
+    private DateTime? _date = DateTime.Today;
+    private TimeSpan? _time = new TimeSpan(00, 00, 00);
+
+    private List<Table> tables;
+    private List<Booking> bookings;
+    private List<Client> clients;
+    //
+    private bool SucModal = false;
+    //
+    public void OpenSucModal()
+    {
+        SucModal = true;
+    }
+    public void CloseSucModal()
+    {
+        SucModal = false;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        tables = await TableService.GetTablesAsync();
+        StateHasChanged();
+    }
+
+    public void ChoisirTable(Table t)
+    {
+        TableChoisis.ChoisirTable(t);
+    }
+    public void uncheckTable(Table t)
+    {
+        TableChoisis.UncheckTable();
+    }
+
+    public async Task CreateClient()
+    {
+
+    }
+
+    public async Task ValiderReservation()
+    {
+        DateTime combinedDateTime = _date.Value.Date.Add(_time.Value);
+        Client client = new Client
+            {
+                Nom = inputNom,
+                Prenom = inputPreNom,
+                Email = inputMail,
+                Telephone = inputPhone
+            };
+        // Store the created client directly
+        Client createdClient = await ClientService.CreateClientAsync(client);
+
+        Booking reservation = new Booking
+            {
+                client = createdClient,  // Use the returned client
+                table = TableChoisis.TbChoisis,
+                DateReservation = combinedDateTime
+            };
+        await TableService.IncrementNbrFoisReserveAsync(TableChoisis.TbChoisis.Id);
+        await BookingService.CreateBookingAsync(reservation);
+        OpenSucModal();
+        ClearInputs();
+
+        tables = await TableService.GetTablesAsync();
+        StateHasChanged();
+    }
+    
+
+    
+
+    private void ClearInputs()
+    {
+        inputNom = "";
+        inputPreNom = "";
+        inputMail = "";
+        inputPhone = "";
+        _date = DateTime.Today;
+        _time = new TimeSpan(00, 45, 00);
+        TableChoisis.UncheckTable();
+    }
+
+    public void NavigateHome()
+    {
+        navigation.NavigateTo("/");
+    }
+}

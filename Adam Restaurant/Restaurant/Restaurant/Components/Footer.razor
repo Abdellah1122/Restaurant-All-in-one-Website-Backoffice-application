@@ -1,0 +1,57 @@
+﻿@inject EmailService Email
+
+<footer class="foot"style="margin-top:2em; ">
+    <div class="Footer-connect">
+        <div class="features-item">
+            <h4>Reservation</h4>
+            <p>
+                Appeller<br /> +212 708-371790
+            </p>
+        </div>
+        <div class="features-item">
+            <h4>Address</h4>
+            <p>Quartier De, Rue Haroun Errachid, Marrakech 40000</p>
+        </div>
+        <div class="features-item">
+            <h4>Horaires d'ouverture</h4>
+            <p>
+                Lun-Jeu : 10h00 - 23h00<br />Ven-Dim : 11h00 - 02h00
+            </p>
+        </div>
+    </div>
+    <div class="form-container">
+        <div class="form-title">Envoyez Nous un Message</div>
+        <input @bind="tel" class="telinp" placeholder="Numero Telephone" />
+        <input @bind="msg" class="msginp" placeholder="Message" />
+
+        <div class="form-button">
+            <button class="ConfirmBTN" @onclick="SendEmail">Envoyer</button>
+        </div>
+    </div>
+    <div class="COPYRIGHT">
+        <p> 2025 Adam Restaurant. All rights reserved.</p>
+        <div class="socials">
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+        </div>
+    </div>
+</footer>
+@code {
+    string msg = string.Empty;
+    string tel = string.Empty;
+
+    public async Task SendEmail()
+    {
+        EmailDTO e = new EmailDTO
+        {
+           Body = "Client :"+tel+ "<br>Message :"+ msg,
+           ToEmail = "abdellahjorf4@gmail.com",
+           Subject = "Message D'un Client"
+
+        };
+        await Email.SendEmailAsync(e);
+        msg = string.Empty;
+        tel = string.Empty;
+    }
+}

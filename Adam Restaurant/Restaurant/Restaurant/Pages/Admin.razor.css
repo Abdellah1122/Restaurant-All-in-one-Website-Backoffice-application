@@ -1,0 +1,309 @@
+﻿.m {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    padding: 0.5em 1.5em;
+}
+
+span {
+    border-bottom: solid 2px #006622;
+    border-rig{h}t: solid 2px #006622;
+    padding: 0.2em;
+    font-weight: bold;
+    border-radius: 5px;
+    color: #006622;
+}
+
+h3::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 90px;
+    margin-top: 0.2em;
+    background-color: black;
+}
+
+.Titre {
+    margin-left: 2em;
+}
+
+.mainSec {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2em;
+    margin-top: -0.5em;
+}
+
+button {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 10em;
+    height: 2.9em;
+    border-radius: 7px;
+    border: none;
+    color: #eee;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+    .table th {
+        text-align: left;
+        padding: 1em;
+        font-weight: 400;
+        color: #800000;
+        border-bottom: 1px solid rgba(128, 0, 0, 0.1);
+    }
+
+    .table td {
+        padding: 1em;
+        color: #982B1C;
+        border-bottom: 1px solid rgba(128, 0, 0, 0.05);
+        vertical-align: middle;
+        text-align: left;
+    }
+.btnNone {
+    width: 6em;
+    height: 2em;
+    border: none;
+    padding: 0.3em;
+    color: #006622;
+    border-bottom: solid 2px #006622;
+    border-right: solid 2px #006622;
+    margin-left: 0.4em;
+}
+
+.btnSuc {
+    background-color: #00802b;
+}
+
+    .btnSuc:hover {
+        background-color: #006622;
+    }
+
+.btnNorm {
+    background-color: transparent;
+    border: 1px solid black;
+    color: black;
+}
+
+    .btnNorm:hover {
+        background-color: #ac7339;
+        color: #eee;
+        border: none;
+    }
+
+.btnDang {
+    background-color: #e60000;
+}
+
+    .btnDang:hover {
+        background-color: #990000;
+    }
+
+.btnCC {
+    background-color: #00b386;
+}
+
+    .btnCC:hover {
+        background-color: #008060;
+    }
+
+.btnWarning {
+    background-color: #ff9933;
+}
+
+    .btnWarning:hover {
+        background-color: #e67300;
+    }
+
+.btns {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.3em;
+}
+
+.Panel {
+    width: 90%;
+    height: 79vh;
+    background-color: white;
+    padding: 0.7em;
+    border-radius: 1em;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+
+.Riglage {
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 7px;
+    border: none;
+    color: black;
+}
+
+    .Riglage:hover {
+        color: #eee;
+        background-color: black;
+        cursor: pointer
+    }
+
+.c1 {
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.M3 {
+    background-color: #eee;
+    border-radius: 10px;
+    width: 45em; /* Reduced from 80em */
+    height: 37em; /* Reduced from 45em */
+    padding: 2em;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1em; /* Reduced from 2em */
+}
+
+.M2 {
+    background-color: #eee;
+    border-radius: 10px;
+    width: 45em; /* Reduced from 80em */
+    height: 27em; /* Reduced from 45em */
+    padding: 2em;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1em; /* Reduced from 2em */
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding-left: 1em;
+}
+
+input {
+    border: none;
+    padding: 0.7em;
+    border-radius: 5px;
+}
+
+.CatF {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    justify-content: center;
+}
+
+.btnCat {
+    width: 9em;
+    height: 3em;
+    border-radius: 7px;
+    border: none;
+    color: black;
+    background-color: #ecc6d9;
+}
+
+    .btnCat:hover {
+        background-color: #df9fbf;
+    }
+
+img {
+    width: 10em;
+    height: 6.5em;
+    border-radius: 1em;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.imgemp {
+    width: 7em;
+    height: 7.5em;
+    border-radius: 0.4em;
+}
+
+.ddp {
+    margin-top: -1.6em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.tf1 {
+    background-color: #eee;
+    border-radius: 1em;
+    padding: 0em 1em;
+    height: 19vh;
+    overflow-y: auto;
+}
+
+.LastSec {
+    height: 38vh;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    padding: 0.2em;
+    justify-content: center;
+    align-items: center;
+}
+
+.ADDP {
+    background-color: #eee;
+    border-radius: 1em;
+    padding: 1em;
+    width: 27%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+}
+
+    .ADDP input {
+        padding: 0.4em;
+    }
+
+.Actions {
+    background-color: #eee;
+    border-radius: 1em;
+    padding: 1em;
+    width: 20%;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+}
+
+.impsArt {
+    background-color: #eee;
+    border-radius: 1em;
+    padding: 1em;
+    width: 50%;
+    height: 37vh;
+    overflow-y: auto;
+}

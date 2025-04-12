@@ -1,0 +1,1842 @@
+﻿@page "/Admin"
+@attribute [Authorize]
+@inject NavigationManager Navigation
+@inject ILocalStorageService LocalStorage
+
+@inject CategorieFournisseurService CategorieFournisseurService
+@inject PlatService PlatService
+@inject TableService TableService
+@inject EmployeeService EmployeeService
+@inject OwnerService OwnerService
+@inject CategoriePlatService CategoriePlatService
+@inject TiquetService TiquetService
+@inject FournisseurService FournisseurService
+@inject BookingService BookingService
+@inject EmailService EmailService 
+@inject TiquetArchiveService TiquetArchiveService
+
+<style>
+	* {
+		transition: .3s ease-in-out;
+		font-family: 'Montserrat', sans-serif;
+		margin: 0;
+		box-sizing: border-box;
+	}
+	body {
+		font-family: Montserrat;
+		position: fixed;
+		padding: 0;
+		margin: 0;
+		background-color: #F5F5F5;
+		overflow: hidden;
+	}
+
+	.M1{
+		width:40em;
+		height:20em;
+		background-color: #eee;
+		border: 1px solid rgba(128, 0, 0, 0.1);
+		border-radius: 4px;
+		padding: 2.5em;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 1000;
+		box-shadow: 0 20px 40px rgba(128, 0, 0, 0.05);
+		display:flex;
+		flex-direction:column;
+		justify-content:center;
+		align-items:center;
+		gap:2em;
+	}
+	.btnStats{
+		background-color:#bf00ff;
+		color:white;
+	}
+
+	.btnStats:hover {
+		background-color: #9900cc;
+	}
+	.Infossss{
+		display:flex;
+		flex-direction:row;
+		justify-content:center;
+		align-items:center;
+		gap:10em;
+	}
+	.Infossss p{
+		font-size:1.1em;
+		background-color:#eee;
+		padding:1em;
+		border-radius:1em;
+	}
+	.PlatCharts{
+		display:flex;
+		flex-direction:row;
+		justify-content:space-around;
+	}
+	.Chart{
+	background-color:#eee;
+	width:42em;
+	height:31em;
+	padding:1em;
+	border-radius:5px;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	}
+	.Chart h4{
+		border-bottom:2px solid black;
+	}
+	.Chartsss{
+		display:flex;
+		flex-direction:column;
+		justify-content:space-around;
+		height:100%;
+		
+		padding:1em;
+	}
+
+	.mud-charts-xaxis text {
+		writing-mode: vertical-lr;
+	}
+
+	.mud-chart-line {
+		overflow: visible;
+	}
+
+
+	</style>
+<div class="m">
+	<div class="Titre">
+		@if (owner != null)
+		{
+			<h3>Bonjour Admin: <span>@owner.Nom</span></h3>
+		}	
+	</div>
+	<div class="Msg">
+		Bienvenue sur votre panneau d’administration. À gauche, le menu permet d’accéder aux sections :Employés, Tickets, Plats , Categories des plats et Tables. Le contenu sélectionné s’affiche à droite pour gestion. Seul vous avez accès à ce panneau, garantissant la sécurité des données. Un bouton de déconnexion est disponible pour quitter en toute sécurité.
+		<br />En cas de Problem Reload Page<button class="btnNone" @onclick="Fetch">Reload.</button>
+	</div>
+	<div class="mainSec">
+		<div class=" btns">
+			<button @onclick="OpenTiquetPanel" class="btnNorm">Tiquets</button>
+			<button  class="btnNorm" @onclick="OpenReservationPanel">Reservations</button>
+			<button @onclick="OpenEmployePanel" class="btnNorm">Employees</button>
+			<button @onclick="OpenPlatPanel"class="btnNorm">Plats</button>
+			<button @onclick="OpenCatPlatPanel" class="btnNorm">Categories Plats</button>
+			<button @onclick="OpenTablePanel" class="btnNorm">Tables</button>
+			<button @onclick="OpenFournisseurPanel" class="btnNorm">Fournisseurs</button>
+			<button class="btnCC" @onclick="OpenDDPPanel">Demande Prix</button>
+			<button class="btnCC"@onclick="OpenBONCPanel">Bon Commande</button>
+			<button class="btnCC" @onclick="OpenDDRPanel">Demande Retour</button>
+			<button @onclick="ClosePanels" class="btnWarning">Fermer Panneaux</button>
+			<button class="btnDang" @onclick="Logout">Se Deconnecter</button>
+		</div>
+		<div class="Panel">
+			@if (PlatPanel)
+			{
+				<div class="c1">
+					<h3>Plats:</h3>
+					<div>
+						<button @onclick="OpenStatsPlats" class="btnStats">Stats Plats</button>
+						<button class="btnSuc" @onclick="OpenPlatAddModal">Ajouter Plat</button>
+					</div>
+					
+				</div>
+
+				if(plats!=null && plats.Any())
+				{
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID Plat</th>
+								<th scope="col">Nom Plat</th>
+								<th scope="col">Description</th>
+								<th scope="col">Prix </th>
+								<th scope="col">Image</th>
+								<th scope="col">Categorie</th>
+								<th scope="col">nbr Fois Commandé</th>
+								<th scope="col">#</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach(var p in plats)
+							{
+								<tr>
+									<td>@p.Id</td>
+									<td>@p.NomPlat</td>
+									<td>@p.Description</td>
+									<td>@p.PrixPlat</td>
+									<td><img src="/ImagePlats/@p.ImagePlat"/></td>
+									<td>@p.categorie.Nom</td>
+									<td>@p.NbrFoisCommande</td>
+									<td><button class="Riglage" @onclick="()=>RemovePlat(p)" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (CatPlatPanel)
+			{
+				<div class="c1">
+					<h3>Categorie Plats:</h3>
+					<button class="btnSuc" @onclick="OpenCatPlatAddModal">Ajouter Categorie</button>
+				</div>
+
+				if (categoriePlats != null && categoriePlats.Any())
+				{
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID </th>
+								<th scope="col">Nom Categorie</th>
+								<th scope="col">Description</th>
+								<th scope="col"># </th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in categoriePlats)
+							{
+								<tr>
+									<td>@cp.Id</td>
+									<td>@cp.Nom</td>
+									<td>@cp.Description</td>
+									<td><button class="Riglage" @onclick="()=>RemoveCatPlat(cp)" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (EmployePanel)
+			{
+				<div class="c1">
+					<h3>Employees</h3>
+					<button class="btnSuc" @onclick="OpenEmployeAddModal">Ajouter Employe</button>
+				</div>
+
+				if (employees != null && employees.Any())
+				{
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID </th>
+								
+								<th scope="col">Image Employee </th>
+								<th scope="col">Nom Employee</th>
+								<th scope="col">Prenom Employee</th>
+								<th scope="col">CIN Employee </th>
+								<th scope="col">Telephone</th>
+								<th scope="col">Salaire</th>
+								<th scope="col">#</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in employees)
+							{
+								<tr>
+									<td>@cp.Id</td>
+									<td><img  class="imgemp"src="/ImageEmployee/@cp.Image"/></td>
+									<td>@cp.Nom</td>
+									<td>@cp.Prenom</td>
+									<td>@cp.CIN</td>
+									<td>@cp.Phone</td>
+									<td>@cp.Salaire DH</td>
+									<td><button class="Riglage" @onclick="()=>RemoveEMP(cp)" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (StatsPlats)
+			{
+
+				<div class="c1">
+					<h3>Statistiques des plats</h3>
+				</div>
+				if(plats!=null && plats.Any())
+				{
+					<div class="Chartsss">
+						<div class="Infossss">
+							<p>Nombre total de plats : <b>@plats.Count()</b> </p>
+							<p>Prix moyen des plats : <b>@((plats.Sum(c => c.PrixPlat) / (double)plats.Count()).ToString("F2"))</b>  DH</p>
+							<p>Plat le plus commandé : <b>@MostOrdered.NomPlat</b></p>
+							<p>Plat le moins commandé : <b>@LeastOrdered.NomPlat</b></p>
+						</div>
+						<div class="PlatCharts">
+							<div class="Chart" style="width:36%;">
+								<h4>Les 7 Plats les Plus Commandés:</h4>
+								<MudChart ChartType="ChartType.Donut" LegendPosition="Position.Top" Width="300px" Height="300px"
+										  InputData="@TotalVente" InputLabels="@labels">
+								</MudChart>
+							</div>
+							<div class="Chart" style="width:60%;">
+								<h4>Revenu par plat</h4>
+								
+									<MudChart ChartType="ChartType.Bar"
+											  ChartSeries="@Series"
+											  XAxisLabels="@XAxisLabels"
+											  Width="100%"
+											  Height="330px"
+											  ChartOptions="@_options2">
+									>
+									</MudChart>
+							</div>
+						</div>
+					</div>
+				}
+
+	
+				
+			}
+			else if (StatsTables)
+			{
+				<div class="c1">
+					<h3>Statistiques des tables</h3>
+				</div>
+				if (tables != null && tables.Any())
+				{
+					<div class="Chartsss">
+						<div class="Infossss">
+							<p>Nombre total des Tables : <b>@tables.Count()</b> </p>
+							<p>Table Plus Réservée : Table:<b>@MostReserved.MatriculeTable</b></p>
+							<p>Table Plus Occupée :  Table:<b>@MostOccupied.MatriculeTable</b></p>
+						</div>
+						<div class="PlatCharts">
+							<div class="Chart" >
+								<h4>Reservations par Tables</h4>
+								<MudChart ChartType="ChartType.Bar"
+										  ChartSeries="@Series2"
+										  XAxisLabels="@XAxisLabels1"
+										  Width="100%"
+										  Height="330px"
+										  ChartOptions="@_options">
+									>
+								</MudChart>
+							</div>
+							<div class="Chart" >
+								<h4>Occupations par Tables</h4>
+								<MudChart ChartType="ChartType.Bar"
+										  ChartSeries="@Series1"
+										  XAxisLabels="@XAxisLabels1"
+										  Width="100%"
+										  Height="330px"
+										  ChartOptions="@_options">
+									>
+								</MudChart>
+							</div>
+						</div>
+					</div>
+				}
+
+			}
+			else if (DemandePrixPanel)
+			{
+				<div class="c1">
+					<h3>Demande Prix</h3>
+				</div>
+				<div class="ddp">
+					<div class="CatF">
+						@if (categorieFournisseurs != null)
+						{
+							foreach (var cf in categorieFournisseurs)
+							{
+								<button class="btnCat" @onclick="()=>FilterFournisseur(cf.Id)">@cf.Nom</button>
+							}
+							<button class="btnCat" @onclick="ShowAllFournisseur">Afficher Tout</button>
+						}
+					</div>
+					<div class="tf1">
+						@if (fournisseurs != null && fournisseurs.Any() && categorieFournisseurs!=null && categorieFournisseurs.Any())
+						{
+
+						<table class="table">
+							
+							<tbody>
+								@foreach (var cp in filteredfournisseurs)
+								{
+									<tr>
+										<td>@cp.Nom</td>
+										<td>@cp.Prenom</td>
+										<td>@cp.Email</td>
+										<td>@cp.Phone</td>
+										<td>@cp.categorie.Nom </td>
+										<td><button class="Riglage" style="background-color:green; color:white;"@onclick="()=>ChoisirFournisseur(cp)"><i class="bi bi-person-check-fill"></i></button></td>
+									</tr>
+								}
+							</tbody>
+						</table>
+						}
+					</div>
+					<div class="LastSec">
+						<div class="ADDP">
+							<h5>Inputs</h5>
+							<input @bind="ArticleNom" placeholder="Nom Article"/>
+							<input @bind="ArticleQTE" placeholder="Qauntité"/>
+							<input @bind="ArticleMeasurement" placeholder="Unite De Measure (kg, litre,Unité)" />
+							<button class="btnSuc" @onclick="AjouterArticleDDP">Ajouter a la liste</button>
+						</div>
+						<div class="impsArt">
+							@if (articleDDPs!=null && articleDDPs.Any() && FournisseurChoisis!=null)
+							{
+								<h5>Fournisseur Choisis: @FournisseurChoisis.Prenom</h5>
+								<table class="table">
+									<thead >
+										<tr>
+											<th scope="col">Nom Article</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Measurement</th>
+											<th scope="col">#</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach(var a in articleDDPs){
+											<tr>
+												<td>@a.Nom</td>
+												<td>@a.Quantity</td>
+												<td>@a.Measurement</td>
+												<td><button @onclick="()=>RemoveA(a)" class="Riglage" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							}
+							else
+							{
+								<h5>Veuillez Choisir un Fournisseur et remplir une liste des Articles d'abord</h5>
+							}
+						</div>
+						<div class="Actions">
+							<h5>Actions</h5>
+							@if (articleDDPs != null && articleDDPs.Any() && FournisseurChoisis != null)
+							{
+								<button class="btnSuc" @onclick="EnvoyerDDPviaMail">Envoyer via mail</button>
+								<button class="btnSuc">Imprimer PDF</button>
+							}
+							else
+							{
+								
+							}
+							
+						</div>
+					</div>
+				</div>
+			}
+			else if (BonCommandePanel)
+			{
+				<div class="c1">
+					<h3>BON COMMANDE</h3>
+				</div>
+				<div class="ddp">
+					<div class="CatF">
+						@if (categorieFournisseurs != null)
+						{
+							foreach (var cf in categorieFournisseurs)
+							{
+								<button class="btnCat" @onclick="()=>FilterFournisseur(cf.Id)">@cf.Nom</button>
+							}
+							<button class="btnCat" @onclick="ShowAllFournisseur">Afficher Tout</button>
+						}
+					</div>
+					<div class="tf1">
+						@if (fournisseurs != null && fournisseurs.Any() && categorieFournisseurs != null && categorieFournisseurs.Any())
+						{
+
+							<table class="table">
+
+								<tbody>
+									@foreach (var cp in filteredfournisseurs)
+									{
+										<tr>
+											<td>@cp.Nom</td>
+											<td>@cp.Prenom</td>
+											<td>@cp.Email</td>
+											<td>@cp.Phone</td>
+											<td>@cp.categorie.Nom </td>
+											<td><button class="Riglage" style="background-color:green; color:white;" @onclick="()=>ChoisirFournisseur(cp)"><i class="bi bi-person-check-fill"></i></button></td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						}
+					</div>
+					<div class="LastSec">
+						<div class="ADDP">
+							<h5>Inputs</h5>
+							<input @bind="ArticleNom" placeholder="Nom Article" />
+							<input @bind="ArticleQTE" placeholder="Qauntité" />
+							<input @bind="ArticleMeasurement" placeholder="Unite De Measure (kg, litre,Unité)" />
+							<input @bind="ArticlePrixU" placeholder="Prix Unitaire" />
+							<button class="btnSuc" @onclick="AjouterArticleCommande">Ajouter a la liste</button>
+						</div>
+						<div class="impsArt">
+							@if (articleCommandes != null && articleCommandes.Any() && FournisseurChoisis != null)
+							{
+								<h5>Fournisseur Choisis: @FournisseurChoisis.Prenom</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Nom Article</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Measurement</th>
+											<th scope="col">Prix U</th>
+											<th scope="col">Prix T</th>
+											<th scope="col">#</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var a in articleCommandes)
+										{
+											<tr>
+												<td>@a.Nom</td>
+												<td>@a.Quantity</td>
+												<td>@a.Measurement</td>
+												<td>@a.PrixUnitaire</td>
+												<td>@a.PrixTotal</td>
+												<td><button @onclick="()=>RemoveAC(a)" class="Riglage" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							}
+							else
+							{
+								<h5>Veuillez Choisir un Fournisseur et remplir une liste des Articles d'abord</h5>
+							}
+						</div>
+						<div class="Actions">
+							<h5>Actions</h5>
+							@if (articleCommandes != null && articleCommandes.Any() && FournisseurChoisis != null)
+							{
+								<button class="btnSuc" @onclick="EnvoyerBonCommande">Envoyer via mail</button>
+								<button class="btnSuc">Imprimer PDF</button>
+							}
+							else
+							{
+
+							}
+
+						</div>
+					</div>
+				</div>
+			}
+			else if (DemandeRetourPanel)
+			{
+				<div class="c1">
+					<h3>Demande de Retour</h3>
+				</div>
+				<div class="ddp">
+					<div class="CatF">
+						@if (categorieFournisseurs != null)
+						{
+							foreach (var cf in categorieFournisseurs)
+							{
+								<button class="btnCat" @onclick="()=>FilterFournisseur(cf.Id)">@cf.Nom</button>
+							}
+							<button class="btnCat" @onclick="ShowAllFournisseur">Afficher Tout</button>
+						}
+					</div>
+					<div class="tf1">
+						@if (fournisseurs != null && fournisseurs.Any() && categorieFournisseurs != null && categorieFournisseurs.Any())
+						{
+
+							<table class="table">
+
+								<tbody>
+									@foreach (var cp in filteredfournisseurs)
+									{
+										<tr>
+											<td>@cp.Nom</td>
+											<td>@cp.Prenom</td>
+											<td>@cp.Email</td>
+											<td>@cp.Phone</td>
+											<td>@cp.categorie.Nom </td>
+											<td><button class="Riglage" style="background-color:green; color:white;" @onclick="()=>ChoisirFournisseur(cp)"><i class="bi bi-person-check-fill"></i></button></td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						}
+					</div>
+					<div class="LastSec">
+						<div class="ADDP">
+							<h5>Inputs</h5>
+							<input @bind="ArticleNom" placeholder="Nom Article" />
+							<input @bind="ArticleQTE" placeholder="Qauntité" />
+							<input @bind="ArticleMeasurement" placeholder="Unite De Measure (kg, litre,Unité)" />
+							<button class="btnSuc" @onclick="AjouterArticleDDP">Ajouter a la liste</button>
+						</div>
+						<div class="impsArt">
+							@if (articleDDPs != null && articleDDPs.Any() && FournisseurChoisis != null)
+							{
+								<h5>Fournisseur Choisis: @FournisseurChoisis.Prenom</h5>
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Nom Article</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Measurement</th>
+											<th scope="col">#</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var a in articleDDPs)
+										{
+											<tr>
+												<td>@a.Nom</td>
+												<td>@a.Quantity</td>
+												<td>@a.Measurement</td>
+												<td><button @onclick="()=>RemoveA(a)" class="Riglage" style="background-color:red; color:white;"><i class="bi bi-trash3"></i></button></td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							}
+							else
+							{
+								<h5>Veuillez Choisir un Fournisseur et remplir une liste des Articles d'abord</h5>
+							}
+						</div>
+						<div class="Actions">
+							<h5>Actions</h5>
+							@if (articleDDPs != null && articleDDPs.Any() && FournisseurChoisis != null)
+							{
+								<button class="btnSuc" @onclick="EnvoyerDDRviaMail">Envoyer via mail</button>
+								<button class="btnSuc">Imprimer PDF</button>
+							}
+							else
+							{
+
+							}
+
+						</div>
+					</div>
+				</div>
+
+			}
+			else if (TiquetPanel)
+			{
+				if (tiquets != null && tiquets.Any())
+				{
+					<div class="c1">
+						<h3>Tiquets:</h3>
+						<button style="width:14em;padding:0.5em;" class="btnDang">Réinitialiser les Tickets</button>
+					</div>
+					<h5 style="color:green;padding :0.5em; border-bottom:1px solid black;border-radius:5px; width:25em;">@tiquets.Count() Vents &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Total Des Gains: @tiquets.Sum(c => c.TotalTiquet) DH </h5>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID </th>
+								<th scope="col">DateTiquet</th>
+								<th scope="col">Table</th>
+								<th scope="col">Mode de Payment</th>
+								<th scope="col">Total Tiquet</th>
+								<th scope="col">Montant Donnée</th>
+								<th scope="col">Reste</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in tiquets)
+							{
+								<tr>
+									<td>@cp.Id</td>
+									<td>@cp.DateTiquet</td>
+									<td>@cp.table.MatriculeTable</td>
+									<td>@cp.ModePayment</td>
+									<td>@cp.TotalTiquet DH</td>
+									<td>@cp.MontantDonne DH</td>
+									<td>@cp.Reste DH</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (reservationPanel)
+			{
+				<div class="c1">
+					<h3>Reservations:</h3>
+				</div>
+
+				if (reservations != null && reservations.Any())
+				{
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID </th>
+								<th scope="col">Nom Clien</th>
+								<th scope="col">Prenom Client</th>
+								<th scope="col">Email Client</th>
+								<th scope="col">Telephone Client</th>
+								<th scope="col">Matricule Table</th>
+								<th scope="col">Date de Reservation</th>
+								<th scope="col"># </th>
+								<th scope="col"># </th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in reservations)
+							{
+								if (cp.Statut == StatutReservation.confirmer)
+								{
+									<tr style="background-color:#ccffdd">
+										<td>@cp.Id</td>
+										<td>@cp.client.Nom</td>
+										<td>@cp.client.Prenom</td>
+										<td>@cp.client.Email</td>
+										<td>@cp.client.Telephone</td>
+										<td>@cp.table.MatriculeTable</td>
+										<td>@cp.DateReservation</td>
+										<td>#</td>
+										<td><button class="Riglage" style="background-color:red; color:white;" @onclick="()=>SupprimerReservation(cp)"><i class="bi bi-trash3"></i></button></td>
+									</tr>
+								}else if (cp.Statut == StatutReservation.rejected)
+								{
+									<tr style="background-color:#ffcccc">
+										<td>@cp.Id</td>
+										<td>@cp.client.Nom</td>
+										<td>@cp.client.Prenom</td>
+										<td>@cp.client.Email</td>
+										<td>@cp.client.Telephone</td>
+										<td>@cp.table.MatriculeTable</td>
+										<td>@cp.DateReservation</td>
+										<td>#</td>
+										<td><button class="Riglage" style="background-color:red; color:white;" @onclick="()=>SupprimerReservation(cp)"><i class="bi bi-trash3"></i></button></td>
+									</tr>
+								}
+								else
+								{
+									<tr>
+										<td>@cp.Id</td>
+										<td>@cp.client.Nom</td>
+										<td>@cp.client.Prenom</td>
+										<td>@cp.client.Email</td>
+										<td>@cp.client.Telephone</td>
+										<td>@cp.table.MatriculeTable</td>
+										<td>@cp.DateReservation</td>
+										<td><button class="Riglage" style="background-color:green; color:white;" @onclick="()=>SendMail(cp)"><i class="bi bi-check-square-fill"></i></button></td>
+										<td><button class="Riglage" style="background-color:red; color:white;" @onclick="()=>RejectReservation(cp)"><i class="bi bi-ban"></i></button></td>
+									</tr>
+								}
+
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (TablePanel)
+			{
+				<div class="c1">
+					<h3>Tables:</h3>
+					<div>
+						<button @onclick="OpenStatsTable" class="btnStats">Stats Table</button>
+						<button class="btnSuc" @onclick="OpenTableAddModal">Ajouter Table</button>
+					</div>
+					
+				</div>
+
+				if (tables != null && tables.Any())
+				{
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID </th>
+								<th scope="col">Matricule Table</th>
+								<th scope="col">Statut Table</th>
+								<th scope="col">Nbr Fois Reservé</th>
+								<th scope="col">Nbr Fois Occupé</th>
+								<th scope="col"># </th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in tables)
+							{
+								<tr>
+									<td>@cp.Id</td>
+									<td>@cp.MatriculeTable</td>
+									<td>@cp.statut</td>
+									<td>@cp.NbrFoisReserve</td>
+									<td>@cp.NbrFoisOccupe</td>
+									<td><button class="Riglage" style="background-color:red; color:white;" @onclick="()=>RemoveTable(cp)"><i class="bi bi-trash3" @></i></button></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else if (FournisseurPanel)
+			{
+				<div class="c1">
+					<h3>Fournisseur:</h3>
+					<button class="btnSuc" @onclick="OpenFournisseurADDPanel">Add Fournisseur</button>
+				</div>
+				<div class="CatF">
+					@if (categorieFournisseurs != null)
+					{
+						foreach(var cf in categorieFournisseurs)
+						{
+							<button class="btnCat" @onclick="()=>FilterFournisseur(cf.Id)">@cf.Nom</button>
+						}
+							<button class="btnCat" @onclick="ShowAllFournisseur">Afficher Tout</button>
+					}
+				</div>
+				if (fournisseurs != null && fournisseurs.Any() && categorieFournisseurs!=null && categorieFournisseurs.Any())
+				{
+					
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Nom </th>
+								<th scope="col">Prenom</th>
+								<th scope="col">Email</th>
+								<th scope="col">Telephone </th>
+								<th scope="col">Categorie </th>
+								<th scope="col"># </th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var cp in filteredfournisseurs)
+							{
+								<tr>
+									<td>@cp.Nom</td>
+									<td>@cp.Prenom</td>
+									<td>@cp.Email</td>
+									<td>@cp.Phone</td>
+									<td>@cp.categorie.Nom </td>
+									<td><button class="Riglage" style="background-color:red; color:white;" @onclick="()=>RemoveFournisseur(cp)"><i class="bi bi-trash3"></i></button></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+
+			}
+			else
+			{
+				<h3>Aucun Panneux n'est ouvert</h3>
+			}
+		</div>
+	</div>
+</div>
+
+@if (PlatAddModal)
+{
+	<div class="backdrop"></div>
+	<div class="M3">
+		<div class="c1">
+			<h3>Ajouter Un Plat:</h3>
+				<button class="btnDang" @onclick="ClosePlatADDModal">Fermer</button>
+		</div>
+		<div class="inputs">
+			<input @bind="PlatNomAdd" placeholder="Nom Du Plat"/>
+			<input @bind="PlatDescriptionAdd" placeholder="Description Plat" />
+			<input @bind="PlatPrixAdd" placeholder="Prix Du Plat" />
+			<input @bind="PlatImageAdd" placeholder="Image Du Plat" />
+			<input @bind="PlatCatIdAdd" placeholder="ID Categorie Du Plat" />
+		</div>
+		<button class="btnSuc" @onclick="AjouterPlat">Ajouter</button>
+	
+	</div>
+}
+@if (CatPlatAddModal)
+{
+	<div class="backdrop"></div>
+	<div class="M2">
+		<div class="c1">
+			<h3>Ajouter Une Categorie:</h3>
+			<button class="btnDang" @onclick="CloseCatPlatADDModal">Fermer</button>
+		</div>
+		<div class="inputs">
+			<input @bind="CatPlatNom" placeholder="Nom Du Plat" />
+			<input @bind="CatPlatDescription" placeholder="Description Plat" />
+		</div>
+		<button class="btnSuc" @onclick="AjouterCAT">Ajouter</button>
+
+	</div>
+}
+
+@if (TableAddModal)
+{
+	<div class="backdrop"></div>
+	<div class="M2">
+		<div class="c1">
+			<h3>Ajouter Une Table:</h3>
+			<button class="btnDang" @onclick="CloseTableADDModal">Fermer</button>
+		</div>
+		<div class="inputs">
+			<input @bind="TableMatriculee" placeholder="Matricule Table" />
+		</div>
+		<button class="btnSuc" @onclick="AjouterTable">Ajouter</button>
+
+	</div>
+}
+@if (EmployeAddModal)
+{
+	<div class="backdrop"></div>
+	<div class="M3">
+		<div class="c1">
+			<h3>Ajouter Un Employe:</h3>
+			<button class="btnDang" @onclick="CloseEmployeADDModal">Fermer</button>
+		</div>
+		<div class="inputs">
+			<input @bind="NomEmploye" placeholder="Nom Employe" />
+			<input @bind="PrenomEmploye" placeholder="Prenom Employe" />
+			<input @bind="TelephoneEmploye" placeholder="Telephone" />
+			<input @bind="CINEmp" placeholder="CIN" />
+			<input @bind="ImgEmp" placeholder="Image Employe" />
+			<input @bind="SalaireEmploye" placeholder="Salaire" />
+		</div>
+		<button class="btnSuc" @onclick="AjouterEmploye">Ajouter</button>
+
+	</div>
+}
+
+
+@if (FournisseurAddPanel)
+{
+	<div class="backdrop"></div>
+	<div class="M3">
+		<div class="c1">
+			<h3>Ajouter Un Fournisseur:</h3>
+			<button class="btnDang" @onclick="closeFournisseurADDPanel">Fermer</button>
+		</div>
+		<div class="inputs">
+			<input @bind="NomFournisseur" placeholder="Nom Fournisseur" />
+			<input @bind="PrenomFournisseur" placeholder="Prenom Fournisseur" />
+			<input @bind="EmailFournisseur" placeholder="Email Fournisseur" />
+			<input @bind="TelephoneFournisseur" placeholder="Telephone Fournisseur" />
+			<input @bind="catIdFournisseur" placeholder="Categorie ID" />
+		</div>
+		<div class="c1">
+			<button class="btnSuc" @onclick="AjouterFournisseur">Ajouter</button>
+		</div>
+
+	</div>
+}
+@if (MailConfirmModal)
+{
+	<div class="backdrop"></div>
+	<div class="M1">
+			<h3>Email Envoyé avec Suceess</h3>
+		
+		<div class="c1">
+			<button class="btnDang" @onclick="Closse">Fermer</button>
+		</div>
+
+	</div>
+}
+@if (PDFConfirmModal)
+{
+	<div class="backdrop"></div>
+	<div class="M1">
+		<h3>PDF Imprimé avec Suceess</h3>
+
+		<div class="c1">
+			<button class="btnDang" @onclick="Closse">Fermer</button>
+		</div>
+
+	</div>
+}
+
+
+
+@code {
+	List<Plat> plats;
+	List<Table> tables;
+	List<Employee> employees;
+	Owner owner;
+	List<CategoriePlat> categoriePlats;
+	List<Tiquet> tiquets;
+	List<Booking> reservations;
+	List<Fournisseur> fournisseurs;
+	List<Fournisseur> filteredfournisseurs;
+	List<CategorieFournisseur> categorieFournisseurs;
+	public List<ArticleDDP> articleDDPs = new List<ArticleDDP>();
+	List<ArticleCommande> articleCommandes =new List<ArticleCommande>();
+	//
+	Plat? PlatCurrent;
+	Table? TableCurrent;
+	Employee? EmpCurrent;
+	CategoriePlat? catPlatCurrent;
+	Fournisseur? FournisseurChoisis;
+	//
+	public double[] TotalVente;
+	public string[] labels ;
+	public Plat MostOrdered;
+	public Plat LeastOrdered;
+	public Table MostReserved;
+	public Table MostOccupied;
+
+	public List<ChartSeries> Series = new List<ChartSeries>();
+	public string[] XAxisLabels;
+	public List<ChartSeries> Series2 = new List<ChartSeries>();
+	public List<ChartSeries> Series1 = new List<ChartSeries>();
+	public string[] XAxisLabels1;
+
+
+	//
+	bool PlatPanel = false;
+	bool reservationPanel = false;
+	bool TiquetPanel = false;
+	bool EmployePanel = false;
+	bool CatPlatPanel = false;
+	bool TablePanel = false;
+	bool FournisseurPanel = false;
+	bool DemandePrixPanel = false;
+	bool BonCommandePanel = false;
+	bool DemandeRetourPanel = false;
+	bool FournisseurAddPanel = false;
+	bool StatsPlats = false;
+	bool StatsTables = false;
+	//
+	bool MailConfirmModal = false;
+	bool PDFConfirmModal = false;
+	//
+	bool PlatSettingModal = false;
+	bool PlatAddModal = false;
+	bool EmployeSettingModal = false;
+	bool EmployeAddModal = false;
+	bool CatPlatAddModal = false;
+	bool TableAddModal = false;
+	//
+	string PlatNomAdd = string.Empty;
+	string PlatDescriptionAdd = string.Empty;
+	string PlatPrixAdd = string.Empty;
+	string PlatImageAdd = string.Empty;
+	string PlatCatIdAdd = string.Empty;
+	//
+	string CatPlatNom = string.Empty;
+	string CatPlatDescription = string.Empty;
+	//
+	string TableMatriculee = string.Empty;
+	//
+	string NomEmploye = string.Empty;
+	string PrenomEmploye = string.Empty;
+	string TelephoneEmploye = string.Empty;
+	string SalaireEmploye = string.Empty;
+	string ImgEmp = string.Empty;
+	string CINEmp = string.Empty;
+	//
+	string NomFournisseur = string.Empty;
+	string PrenomFournisseur = string.Empty;
+	string TelephoneFournisseur = string.Empty;
+	string EmailFournisseur = string.Empty;
+	string catIdFournisseur = string.Empty;
+	//
+	string ArticleNom = string.Empty;
+	string ArticleQTE = string.Empty;
+	string ArticleMeasurement = string.Empty;
+	string ArticlePrixU = string.Empty;
+	//
+	public void OpenPDF()
+	{
+		PDFConfirmModal = true;
+	}
+	public void openMail()
+	{
+		MailConfirmModal = true;
+	}
+	public void Closse()
+	{
+		PDFConfirmModal = MailConfirmModal= false;
+	}
+	//
+	public void OpenEmployeAddModal()
+	{
+		EmployeAddModal = true;
+	}
+	public async Task CloseEmployeADDModal()
+	{
+		employees = await EmployeeService.GetEmployeesAsync();
+		EmployeAddModal = false;
+	}
+	public void OpenPlatAddModal()
+	{
+		PlatAddModal = true;
+	}
+	public async Task ClosePlatADDModal()
+	{
+		plats = await PlatService.GetPlatsAsync();
+		PlatAddModal = false;
+	}
+	public void OpenCatPlatAddModal()
+	{
+		CatPlatAddModal = true;
+	}
+	public async Task CloseCatPlatADDModal()
+	{
+		categorieFournisseurs = await CategorieFournisseurService.GetCategorieFournisseursAsync();
+		CatPlatAddModal = false;
+	}
+	public void OpenFournisseurADDPanel()
+	{
+		FournisseurAddPanel = true;
+	}
+	public async void closeFournisseurADDPanel()
+	{
+		filteredfournisseurs= fournisseurs = await FournisseurService.GetFournisseursAsync();
+		FournisseurAddPanel = false;
+	}
+	public void OpenTableAddModal()
+	{
+		TableAddModal = true;
+	}
+	public async Task CloseTableADDModal()
+	{
+		tables = await TableService.GetTablesAsync();
+		TableAddModal = false;
+
+	}
+	//
+	public void OpenPlatSettingModal(Plat p)
+	{
+		PlatCurrent = p;
+		PlatSettingModal = true;
+	}
+	public async Task ClosePlatSettingModal()
+	{
+		plats = await PlatService.GetPlatsAsync();
+		PlatSettingModal = false;
+	}
+	public void OpenEmployeeSettingModal(Employee e)
+	{
+		EmpCurrent = e;
+		EmployeSettingModal = true;
+	}
+	public async Task CloseEmployeettingModal()
+	{
+		employees = await EmployeeService.GetEmployeesAsync();
+		EmployeSettingModal = false;
+	}
+	//
+	public void InitializeChartData()
+	{
+		XAxisLabels = plats.Select(p => p.Id.ToString())
+							.ToArray();
+		XAxisLabels1 = tables.Select(p => p.MatriculeTable)
+								.ToArray();
+
+		Series.Add(new ChartSeries()
+        {
+            Name = "Plat Sales", 
+            Data = plats.Select(p => p.PrixPlat * p.NbrFoisCommande)
+						.ToArray()  
+        });
+		Series2.Add(new ChartSeries()
+        {
+            Name = "Reservation", 
+				Data = tables.Select(p => (double)p.NbrFoisReserve)
+								.ToArray()
+        });
+		Series1.Add(new ChartSeries()
+			{
+				Name = "Occupation",
+				Data = tables.Select(p => (double)p.NbrFoisOccupe)
+							.ToArray()
+			});
+	}
+	//
+	private ChartOptions _options = new ChartOptions
+		{
+			XAxisLines=true,
+			YAxisTicks=3
+		};
+	//
+	private ChartOptions _options2 = new ChartOptions
+		{
+			XAxisLines=true
+		};
+	protected override async Task OnInitializedAsync()
+	{
+		tables = await TableService.GetTablesAsync();
+		employees = await EmployeeService.GetEmployeesAsync();
+		plats = await PlatService.GetPlatsAsync();
+		owner = await OwnerService.GetOwnerByIdAsync(1);
+		categoriePlats = await CategoriePlatService.GetCategoriePlatsAsync();
+		filteredfournisseurs=fournisseurs = await FournisseurService.GetFournisseursAsync();
+		categorieFournisseurs = await CategorieFournisseurService.GetCategorieFournisseursAsync();
+		reservations = await BookingService.GetBookingsAsync();
+		//
+		PlatCurrent = plats[0];
+		EmpCurrent = employees[0];
+		//
+		labels = plats.OrderByDescending(p => p.NbrFoisCommande)  
+							.Take(7)                                
+							.Select(p => p.NomPlat)                   
+							.ToArray();
+
+		TotalVente = plats.OrderByDescending(c => c.NbrFoisCommande) 
+								.Take(7)                                   
+								.Select(c => (double)c.NbrFoisCommande)       
+								.ToArray();
+		MostOrdered = plats.OrderByDescending(p => p.NbrFoisCommande).First();
+		LeastOrdered = plats.OrderByDescending(p => p.NbrFoisCommande).Last();
+		InitializeChartData();
+		//
+		MostReserved = tables.OrderByDescending(c => c.NbrFoisReserve).First();
+		MostOccupied = tables.OrderByDescending(c => c.NbrFoisOccupe).First();
+		//
+		tiquets = await TiquetService.GetTiquetsAsync();
+	}
+	public async Task Fetch()
+	{
+		tables = await TableService.GetTablesAsync();
+		employees = await EmployeeService.GetEmployeesAsync();
+		plats = await PlatService.GetPlatsAsync();
+		owner = await OwnerService.GetOwnerByIdAsync(1);
+		categoriePlats = await CategoriePlatService.GetCategoriePlatsAsync();
+		filteredfournisseurs = fournisseurs = await FournisseurService.GetFournisseursAsync();
+		reservations = await BookingService.GetBookingsAsync();
+		tiquets = await TiquetService.GetTiquetsAsync();
+		categorieFournisseurs = await CategorieFournisseurService.GetCategorieFournisseursAsync();
+	}
+
+	public void FilterFournisseur(int id)
+	{
+		filteredfournisseurs = fournisseurs.Where(c => c.categorie.Id == id).ToList();
+	}
+	public void ShowAllFournisseur()
+	{
+		filteredfournisseurs = fournisseurs;
+	}
+	public void OpenPlatPanel()
+	{
+		PlatPanel = true;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		StatsPlats=false;
+		StatsTables = false;
+	}
+	public void OpenTiquetPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = true;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenEmployePanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = true;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenCatPlatPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = true;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenTablePanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = true;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenFournisseurPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = true;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenDDPPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = true;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenBONCPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = true;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenDDRPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = true;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+	public void OpenReservationPanel()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+		reservationPanel = true;
+	}
+	public void OpenStatsPlats()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = true;
+		StatsTables = false;
+	}
+	public void OpenStatsTable()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = true;
+	}
+	public void ClosePanels()
+	{
+		PlatPanel = false;
+		TiquetPanel = false;
+		EmployePanel = false;
+		CatPlatPanel = false;
+		TablePanel = false;
+		FournisseurPanel = false;
+		DemandePrixPanel = false;
+		BonCommandePanel = false;
+		DemandeRetourPanel = false;
+		reservationPanel = false;
+		StatsPlats = false;
+		StatsTables = false;
+	}
+
+
+	public async Task AjouterPlat()
+	{
+		int id = int.Parse(PlatCatIdAdd);
+		double prix = double.Parse(PlatPrixAdd);
+		CategoriePlat categoriePlat = categoriePlats.FirstOrDefault(c => c.Id == id);
+		Plat p = new Plat
+			{
+				NomPlat = PlatNomAdd,
+				Description = PlatDescriptionAdd,
+				ImagePlat = PlatImageAdd,
+				PrixPlat = prix,
+				categorie = categoriePlat
+
+			};
+		await PlatService.CreatePlatAsync(p);
+		PlatNomAdd = string.Empty;
+		PlatDescriptionAdd = string.Empty;
+		PlatPrixAdd = string.Empty;
+		PlatImageAdd = string.Empty;
+		PlatCatIdAdd = string.Empty;
+	}
+	public async Task AjouterFournisseur()
+	{
+		int id=int.Parse(catIdFournisseur);
+		CategorieFournisseur c = categorieFournisseurs.FirstOrDefault(c => c.Id == id);
+		Fournisseur f = new Fournisseur
+			{
+				Nom = NomFournisseur,
+				Prenom = PrenomFournisseur,
+				Email = EmailFournisseur,
+				Phone = TelephoneFournisseur,
+				categorie = c
+
+			};
+		await FournisseurService.CreateFournisseurAsync(f);
+		NomFournisseur = string.Empty;
+		PrenomFournisseur = string.Empty;
+		EmailFournisseur = string.Empty;
+		TelephoneFournisseur = string.Empty;
+		catIdFournisseur = string.Empty;
+
+		fournisseurs = await FournisseurService.GetFournisseursAsync();
+
+	}
+	public async Task AjouterCAT()
+	{
+		CategoriePlat categoriePlat = new CategoriePlat
+			{
+				Nom = CatPlatNom,
+				Description = CatPlatDescription
+			};
+		await CategoriePlatService.CreateCategoriePlatAsync(categoriePlat);
+		CatPlatNom = string.Empty;
+		CatPlatDescription = string.Empty;
+	}
+	public void AjouterArticleDDP()
+	{
+		int q = int.Parse(ArticleQTE);
+		ArticleDDP articleDDP=new ArticleDDP
+		{
+				Nom=ArticleNom,
+				Measurement=ArticleMeasurement,
+				Quantity=q
+		};
+
+		articleDDPs.Add(articleDDP);
+		ArticleNom=string.Empty;
+		ArticleMeasurement=string.Empty;
+		ArticleQTE = string.Empty;
+
+	}
+	public void AjouterArticleCommande()
+	{
+		int q = int.Parse(ArticleQTE);
+		double p = double.Parse(ArticlePrixU);
+		ArticleCommande a = new ArticleCommande
+			{
+				Nom = ArticleNom,
+				Measurement = ArticleMeasurement,
+				Quantity = q,
+				PrixUnitaire = p,
+				PrixTotal = p * q
+			};
+		articleCommandes.Add(a);
+		ArticleNom = string.Empty;
+		ArticleMeasurement = string.Empty;
+		ArticleQTE = string.Empty;
+		ArticlePrixU = string.Empty;
+	}
+	public void RemoveA(ArticleDDP a)
+	{
+		articleDDPs.Remove(a);
+	}
+	public void RemoveAC(ArticleCommande a)
+	{
+		articleCommandes.Remove(a);
+	}
+	//
+	public async Task ReinitialiserTiquets()
+	{
+		var tasks = new List<Task>();
+
+		foreach (var t in tiquets)
+		{
+			var tiquetArchive = new TiquetArchive
+				{
+					DateTiquet = t.DateTiquet,
+					ModePayment = t.ModePayment,
+					MontantDonne = t.MontantDonne,
+					Reste = t.Reste,
+					table = t.table,
+					TotalTiquet = t.TotalTiquet
+				};
+
+			tasks.Add(TiquetArchiveService.CreateTiquetArchiveAsync(tiquetArchive));
+		}
+
+		await Task.WhenAll(tasks); // Wait for all async tasks to complete
+	}
+
+	public async Task AjouterEmploye()
+	{
+		Employee emp = new Employee
+			{
+				Nom=NomEmploye,
+				Prenom=PrenomEmploye,
+				Phone=TelephoneEmploye,
+				CIN=CINEmp,
+				Image=ImgEmp,
+				Salaire=double.Parse(SalaireEmploye)
+			};
+		await EmployeeService.CreateEmployeeAsync(emp);
+		NomEmploye = string.Empty;
+		PrenomEmploye = string.Empty;
+		TelephoneEmploye = string.Empty;
+		SalaireEmploye = string.Empty;
+		ImgEmp=string.Empty;
+		CINEmp = string.Empty;
+
+	}
+	//
+	public async Task RejectReservation(Booking r)
+	{
+		await BookingService.SetReservationRejectedAsync(r.Id);
+		reservations = await BookingService.GetBookingsAsync();
+	}
+	public async Task ConfirmReservation(Booking r)
+	{
+		await BookingService.SetReservationConfirmedAsync(r.Id);
+		await TableService.IncrementNbrFoisReserveAsync(r.table.Id);
+		reservations = await BookingService.GetBookingsAsync();
+	}
+	//
+	public async Task SendMail(Booking r)
+	{
+		EmailDTO email = new EmailDTO
+			{
+				ToEmail = r.client.Email,
+				Subject = $"Réservation confirmée chez Adam's - {r.DateReservation:dd/MM/yyyy}",
+				Body = $@"
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        padding: 20px;
+                    }}
+                    .container {{
+                        max-width: 600px;
+                        background: #fff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    }}
+                    h2 {{
+                        color: #333;
+                    }}
+                    p {{
+                        font-size: 16px;
+                        color: #555;
+                    }}
+                    .footer {{
+                        margin-top: 20px;
+                        text-align: center;
+                        font-size: 14px;
+                        color: #888;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <h2>Réservation confirmée !</h2>
+                    <p>Bonjour <strong>{r.client.Nom} {r.client.Prenom}</strong>,</p>
+                    <p>Nous avons bien enregistré votre réservation :</p>
+                    <ul>
+                        <li><strong>Table :</strong> {r.table.MatriculeTable}</li>
+                        <li><strong>Date :</strong> {r.DateReservation:dddd, dd MMMM yyyy}</li>
+                    </ul>
+                    <p>Nous avons hâte de vous accueillir chez <strong>Adam's</strong>.</p>
+                    <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+                    <div class='footer'>
+                        © {DateTime.Now.Year} Adam's Restaurant - Tous droits réservés.
+                    </div>
+                </div>
+            </body>
+            </html>"
+			};
+		await ConfirmReservation(r);
+		await EmailService.SendEmailAsync(email);
+		reservations = await BookingService.GetBookingsAsync();
+	}
+
+	//
+
+	public async Task AjouterTable()
+	{
+		Table table = new Table
+		{
+			MatriculeTable=TableMatriculee,
+			statut=StatutTable.Vide
+		};
+		await TableService.CreateTableAsync(table);
+		TableMatriculee = string.Empty;
+
+	}
+	//
+	public async Task RemoveCatPlat(CategoriePlat c)
+	{
+		await CategoriePlatService.DeleteCategoriePlatAsync(c.Id);
+		categoriePlats = await CategoriePlatService.GetCategoriePlatsAsync();
+	}
+	public async Task RemovePlat(Plat c)
+	{
+		await PlatService.DeletePlatAsync(c.Id);
+		plats = await PlatService.GetPlatsAsync();
+	}
+	public async Task RemoveEMP(Employee c)
+	{
+		await EmployeeService.DeleteEmployeeAsync(c.Id);
+		employees = await EmployeeService.GetEmployeesAsync();
+	}
+	public async Task RemoveTable(Table a)
+	{
+		await TableService.DeleteTableAsync(a.Id);
+		tables = await TableService.GetTablesAsync();
+	}
+	public async Task RemoveFournisseur(Fournisseur f)
+	{
+		await FournisseurService.DeleteFournisseurAsync(f.Id);
+		filteredfournisseurs = fournisseurs = await FournisseurService.GetFournisseursAsync();
+	}
+	//
+	public async Task SupprimerPlat()
+	{
+		await PlatService.DeletePlatAsync(PlatCurrent.Id);
+	}
+	public async Task SupprimerEmploye()
+	{
+		await EmployeeService.DeleteEmployeeAsync(EmpCurrent.Id);
+	}
+	public async Task SupprimerReservation(Booking b)
+	{
+		await BookingService.DeleteBookingAsync(b.Id);
+		reservations = await BookingService.GetBookingsAsync();
+		StateHasChanged();
+	}
+	//
+	public void ChoisirFournisseur(Fournisseur f)
+	{
+		FournisseurChoisis = f;
+	}
+	//
+	public async Task EnvoyerDDPviaMail()
+	{
+		string body = $@"
+        <div style='font-family: Arial, sans-serif; color: #333;'>
+            <p>Bonjour <strong>{FournisseurChoisis.Nom}</strong>,</p>
+            <p>Nous souhaitons obtenir un devis pour les produits suivants :</p>
+            <table style='border-collapse: collapse; width: 100%; max-width: 600px;'>
+                <thead>
+                    <tr style='background-color: #f8f8f8; text-align: left;'>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Nom Article</th>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Quantité</th>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Unité</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
+		foreach (var article in articleDDPs)
+		{
+			body += $@"
+                    <tr style='border-bottom: 1px solid #ddd;'>
+                        <td style='border: 1px solid #ddd; padding: 8px;'>{article.Nom}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Quantity}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Measurement}</td>
+                    </tr>";
+		}
+
+		body += @"
+                </tbody>
+            </table>
+            <p style='margin-top: 20px;'>Merci de nous indiquer les prix unitaires, les délais de livraison et les conditions de paiement.</p>
+            <p>Dans l’attente de votre retour,</p>
+            <p><strong>" + owner.Nom + @"</strong></p>
+            <p>Adam's</p>
+
+        </div>";
+
+		EmailDTO email = new EmailDTO
+			{
+				ToEmail = FournisseurChoisis.Email,
+				Subject = "Demande de devis pour approvisionnement en produits " + FournisseurChoisis.categorie.Nom,
+				Body = body
+			};
+
+		await EmailService.SendEmailAsync(email);
+		openMail();
+	}
+	public async Task EnvoyerDDRviaMail()
+	{
+		string body = $@"
+        <div style='font-family: Arial, sans-serif; color: #333;'>
+            <p>Bonjour <strong>{FournisseurChoisis.Nom}</strong>,</p>
+            <p>Demande de retour – Produits non conformes :</p>
+            <table style='border-collapse: collapse; width: 100%; max-width: 600px;'>
+                <thead>
+                    <tr style='background-color: #f8f8f8; text-align: left;'>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Nom Article</th>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Quantité</th>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Unité</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
+		foreach (var article in articleDDPs)
+		{
+			body += $@"
+                    <tr style='border-bottom: 1px solid #ddd;'>
+                        <td style='border: 1px solid #ddd; padding: 8px;'>{article.Nom}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Quantity}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Measurement}</td>
+                    </tr>";
+		}
+
+		body += @"
+                </tbody>
+            </table>
+            <p style='margin-top: 20px;'>Merci de nous indiquer les prix unitaires, les délais de livraison et les conditions de paiement.</p>
+            <p>Dans l’attente de votre retour,</p>
+            <p><strong>" + owner.Nom + @"</strong></p>
+            <p>Adam's</p>
+
+        </div>";
+
+		EmailDTO email = new EmailDTO
+			{
+				ToEmail = FournisseurChoisis.Email,
+				Subject = "Demande de Retour en produits " + FournisseurChoisis.categorie.Nom,
+				Body = body
+			};
+
+		await EmailService.SendEmailAsync(email);
+		openMail();
+	}
+	public async Task EnvoyerBonCommande()
+	{
+		string body = $@"
+        <div style='font-family: Arial, sans-serif; color: #333;'>
+            <p>Bonjour <strong>{FournisseurChoisis.Nom}</strong>,</p>
+            <p>Nous confirmons notre commande pour les produits suivants :</p>
+            <table style='border-collapse: collapse; width: 100%; max-width: 600px;'>
+                <thead>
+                    <tr style='background-color: #f8f8f8; text-align: left;'>
+                        <th style='border: 1px solid #ddd; padding: 8px;'>Nom Article</th>
+                        <th style='border: 1px solid #ddd; padding: 8px; text-align: center;'>Quantité</th>
+                        <th style='border: 1px solid #ddd; padding: 8px; text-align: center;'>Unité</th>
+                        <th style='border: 1px solid #ddd; padding: 8px; text-align: right;'>Prix U</th>
+                        <th style='border: 1px solid #ddd; padding: 8px; text-align: right;'>Prix T</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
+		double totalGeneral = 0;
+
+		foreach (var article in articleCommandes)
+		{
+			body += $@"
+                    <tr>
+                        <td style='border: 1px solid #ddd; padding: 8px;'>{article.Nom}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Quantity}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: center;'>{article.Measurement}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: right;'>{article.PrixUnitaire:C}</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: right;'>{article.PrixTotal:C}</td>
+                    </tr>";
+			totalGeneral += article.PrixTotal;
+		}
+
+		body += $@"
+                </tbody>
+                <tfoot>
+                    <tr style='font-weight: bold; background-color: #f8f8f8;'>
+                        <td colspan='4' style='border: 1px solid #ddd; padding: 8px; text-align: right;'>Total Général :</td>
+                        <td style='border: 1px solid #ddd; padding: 8px; text-align: right;'>{totalGeneral:C}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p style='margin-top: 20px;'>Merci de nous confirmer la réception de cette commande et de nous communiquer les délais de livraison.</p>
+            <p>Dans l’attente de votre retour,</p>
+            <p><strong>" + owner.Nom + @"</strong></p>
+            <p>Adam's</p>
+        </div>";
+
+		EmailDTO email = new EmailDTO
+			{
+				ToEmail = FournisseurChoisis.Email,
+				Subject = "Bon de commande",
+				Body = body
+			};
+
+		await EmailService.SendEmailAsync(email);
+		openMail();
+	}
+
+	//
+	private async Task Logout()
+	{
+		await LocalStorage.RemoveItemAsync("authToken");
+		Navigation.NavigateTo("/");
+	}
+}

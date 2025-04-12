@@ -1,0 +1,72 @@
+﻿nav {
+    z-index: 999;
+    height: 2.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2.3em;
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    height: 100%;
+}
+
+
+
+button{
+    padding: 0.5em 1em;
+    border-radius:5px;
+    border:none;
+    text-transform:uppercase;
+    background-color:transparent;
+    color:#eee;
+}
+button:hover{
+    color:red;
+    cursor:pointer;
+    border-bottom:red 2px solid;
+}
+/* Mobile Styles for Nav and Buttons */
+@media (max-width: 768px) {
+    nav {
+        z-index: 999;
+        height: auto; /* Adjusted height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1em; /* Reduced padding */
+    }
+
+    .links {
+        display: flex;
+        flex-direction: column; /* Stack links vertically */
+        justify-content: center;
+        align-items: center;
+        gap: 1em; /* Reduced gap */
+        height: 100%;
+    }
+
+    button {
+        padding: 0.8em 1.5em; /* Increased padding for touch-friendly buttons */
+        border-radius: 5px;
+        border: none;
+        text-transform: uppercase;
+        background-color: transparent;
+        color: #eee;
+        font-size: 0.9em; /* Adjusted font size */
+        width: 100%; /* Full width for easier tapping */
+        text-align: center;
+    }
+
+        button:hover {
+            color: red;
+            cursor: pointer;
+            border-bottom: red 2px solid;
+        }
+}
+

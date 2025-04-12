@@ -1,0 +1,97 @@
+﻿@page "/"
+@inject PlatService PlatService
+@inject TableService TableService
+@inject NavigationManager Navigation
+
+<style>
+    * {
+        transition: .3s ease-in-out;
+        font-family: Montserrat, sans-serif;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color:;
+        width: 100vw;
+        overflow-x: hidden;
+        background-color: #eee;
+    }
+
+
+</style>
+<div class="overlay">
+</div>
+<div class="img">
+    <img src="/Images/Main.jpg" />
+</div>
+<div class="m">
+    <Nav />
+    <div class="intro">
+        <h1>Adam's</h1>
+        <p style="text-align:center; color:#eee">Reservation : +212 708-371790</p>
+    </div>
+    <div class="MainSec">
+        <div class="Reserve">
+            <h5>Reserver</h5>
+            <div class="U">
+                
+                <div class="UR">
+                    <img src="/Images/Dishe.jpg" alt="Image 1" />
+                </div>
+                <!-- Left block (UL) with text -->
+                <div class="UL">
+                    <p>Découvrez notre délicieux menu, conçu pour satisfaire toutes vos envies gastronomiques ! Que vous soyez amateur de plats traditionnels ou à la recherche de nouvelles saveurs, notre carte vous offre un large choix d'options alléchantes. Prenez un moment pour explorer nos plats soigneusement préparés avec des ingrédients frais et de qualité. N'attendez plus, faites défiler notre menu et laissez-vous tenter par une expérience culinaire inoubliable !</p>
+                    <button @onclick="Menu" class="ConfirmBTN">Découvrez notre carte</button>
+                </div>
+            </div>
+            <div class="L">
+                <!-- Right block (LR) with text -->
+                <div class="LR">
+                    <p>Réservez dès maintenant votre table et assurez-vous une place dans notre restaurant ! Profitez d'une ambiance chaleureuse et d'un service impeccable tout en savourant nos plats raffinés. Que ce soit pour un dîner en famille, entre amis ou une soirée spéciale, nous avons l'endroit parfait pour vous. Ne perdez plus de temps, réservez votre table et laissez-nous prendre soin de vous !</p>
+                    <button class="ConfirmBTN" @onclick="Reserver">Reserver Maintenant</button>
+                </div>
+                <!-- Left block (LL) with image -->
+                <div class="LL">
+                    <img src="/Images/Table.jpg" alt="Image 2" />
+                </div>
+            </div>
+        </div>
+
+        <div class="OurStory">
+            <div class="image-about">
+                <img src="/Images/Aside.jpg" alt="Alternate Text" />
+            </div>
+            <div class="aboutt" >
+                <div class="about-title">
+                    <h5>Adam's: Une Excellence Gastronomique Sans Compromis</h5>
+                </div>
+                <div class="about-p">
+                    <p>Fondé sur une vision exigeante de la restauration, CozyBite s’impose comme un modèle d’excellence où chaque détail est maîtrisé avec rigueur. Notre approche repose sur une sélection minutieuse des ingrédients, une exécution technique irréprochable et un service calibré pour garantir une expérience sans faille.</p>
+                    <p>Chaque assiette reflète un engagement absolu envers la qualité. Les produits sont rigoureusement sélectionnés, les techniques de préparation optimisées et les standards d’hygiène maintenus à un niveau exemplaire. L’ambiance, épurée et sophistiquée, est pensée pour offrir un cadre à la hauteur de nos exigences.</p>
+                    <p>L’excellence ne tolère aucune approximation. CozyBite se distingue par une rigueur opérationnelle intransigeante, une précision dans l’exécution et une quête permanente d’innovation. Chaque interaction avec nos clients est menée avec un professionnalisme absolu, garantissant une expérience fluide, discrète et maîtrisée.</p>
+                    <p>Ici, la perfection est la norme.</p>
+                </div>
+            </div>
+        </div>
+        <div class="FindUS">
+            <h2>Découvrez notre emplacement</h2>
+            <div style="width: 92vw; height:80vh;">
+                <iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Marrakech%20.%20Cozytel+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" />
+            </div>
+        </div>
+    </div>
+    <Footer />
+</div>
+
+@code {
+    private async Task Reserver()
+    {
+        Navigation.NavigateTo("/Reserver");   
+    }
+    private async Task Menu()
+    {
+        Navigation.NavigateTo("/Carte");
+    }
+
+}

@@ -1,0 +1,569 @@
+﻿.NV {
+    background-color: #eee;
+    padding: 1.2em 3em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(128, 0, 0, 0.1);
+    margin-bottom: 2em;
+}
+
+    .NV p {
+        color: #800000;
+        font-size: 1.3em;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+    }
+
+button {
+    padding: 0.8em 1.6em;
+    border: 1px solid #982B1C;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #982B1C;
+    font-weight: 400;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    button:hover {
+        background-color: #982B1C;
+        color: #F2E8C6;
+    }
+
+h2 {
+    color: #800000;
+    font-weight: 400;
+    font-size: 1.6em;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    position: relative;
+}
+h5 {
+    color: #800000;
+    font-weight: 400;
+    font-size: 1.2em;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    position: relative;
+}
+
+.Modelss {
+    display: flex;
+    justify-content: space-between;
+    max-height: 50em;
+    gap: 2em;
+    padding: 1.5em;
+}
+
+.Tables {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 3em;
+    width: 70%;
+    height:70%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.AAA {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: center;
+    padding: 2em;
+}
+
+.tableReserverBTN {
+    flex: 1 1 calc(20% - 10px);
+    max-width: calc(15% - 10px);
+    height: 3em;
+    border-radius: 6px;
+    border: none;
+    background-color: #A0A0A0;
+    color: #FFF;
+    font-weight: bold;
+    cursor: not-allowed;
+}
+
+    .tableReserverBTN:hover {
+        background-color: #A0A0A0;
+        color: #FFF;
+        cursor: not-allowed;
+    }
+
+.Inputs {
+    width: 40%;
+    padding: 2.5em;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0em;
+}
+
+    .Inputs label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .Inputs input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #333;
+        transition: 0.3s;
+    }
+
+        .Inputs input:focus {
+            border-color: #6A5A50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(106, 90, 80, 0.5);
+        }
+
+.MenuBtn {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 1.5em;
+    background-color: #006622;
+    border-color: #006622;
+    color: #F2E8C6;
+}
+
+    .MenuBtn:hover {
+        background-color: transparent;
+        color: #006622;
+    }
+
+.ConfirmBTN {
+    width: max-content;
+    margin: 2em auto;
+    display: block;
+    font-size: 1em;
+    padding: 0.8em 2.5em;
+    background-color: #006622;
+    border-color: #006622;
+    color: #F2E8C6;
+}
+
+    .ConfirmBTN:hover {
+        background-color: transparent;
+        color: #006622;
+    }
+
+.tableBTN {
+    flex: 1 1 calc(20% - 10px);
+    max-width: calc(15% - 10px);
+    height: 3em;
+    border-radius: 2px;
+    border: none;
+    background-color: #006622;
+    color: #FFF;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+    .tableBTN:hover {
+        background-color: #006622;
+        transform: translateY(-3px);
+    }
+
+.btnFermer {
+    background-color: #cc0000;
+    border-color: #cc0000;
+    color: #F2E8C6;
+}
+
+    .btnFermer:hover {
+        background-color: transparent;
+        color: #cc0000;
+    }
+.time {
+    margin-top: 1.4em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0.5em;
+}
+
+    .time p {
+        font-weight: bold;
+        font-size: 16px;
+        border-bottom: 2px solid black;
+        border-radius: 4px;
+        width: 11em;
+    }
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+}
+
+.M3, .M2 {
+    background-color: #eee;
+    border: 1px solid rgba(128, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 2em;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    box-shadow: 0 20px 40px rgba(128, 0, 0, 0.05);
+}
+
+.M3 {
+    width: 68em;
+    height: 42em;
+}
+
+.M2 {
+    width: 40em;
+    height: 22em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .M2 p {
+        font-size: 1.3em; /* Increased font size */
+        font-weight: 300;
+        color: #800000;
+        line-height: 1.8;
+        text-align: center;
+    }
+
+.btnss {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 0;
+}
+
+.btnFermer {
+    background-color: #cc0000;
+    border-color: #cc0000;
+    color: #F2E8C6;
+}
+
+.btnSucc {
+    background-color: #006622;
+    border-color: #006622;
+    color: #F2E8C6;
+}
+
+    .btnSucc:hover {
+        background-color: transparent;
+        color: #006622;
+    }
+.btnFermer {
+    background-color: #cc0000;
+    border-color: #cc0000;
+    color: #F2E8C6;
+}
+
+    .btnFermer:hover {
+        background-color: transparent;
+        color: #cc0000;
+    }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .NV {
+        background-color: #eee;
+        padding: 1em; /* Reduced padding */
+        display: flex;
+        flex-direction: column; /* Stack vertically */
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid rgba(128, 0, 0, 0.1);
+        margin-bottom: 1em; /* Reduced margin */
+    }
+
+        .NV p {
+            color: #800000;
+            font-size: 1.1em; /* Reduced font size */
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5em; /* Added margin */
+        }
+
+    button {
+        padding: 0.6em 1.2em; /* Reduced padding */
+        border: 1px solid #982B1C;
+        border-radius: 3px;
+        background-color: transparent;
+        color: #982B1C;
+        font-weight: 400;
+        font-size: 0.9em; /* Reduced font size */
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #982B1C;
+            color: #F2E8C6;
+        }
+
+    h2 {
+        color: #800000;
+        font-weight: 400;
+        font-size: 1.3em; /* Reduced font size */
+        letter-spacing: 0.1em;
+        margin-bottom: 1em; /* Reduced margin */
+        text-align: center;
+        position: relative;
+    }
+
+    h5 {
+        color: #800000;
+        font-weight: 400;
+        font-size: 1em; /* Reduced font size */
+        letter-spacing: 0.1em;
+        margin-bottom: 1em; /* Reduced margin */
+        text-align: center;
+        position: relative;
+    }
+
+    .Modelss {
+        display: flex;
+        flex-direction: column; /* Stack vertically */
+        max-height: none; /* Remove fixed height */
+        gap: 1em; /* Reduced gap */
+        padding: 1em; /* Reduced padding */
+    }
+
+    .Tables {
+        background-color: #ffffff;
+        border-radius: 6px;
+        padding: 1.5em; /* Reduced padding */
+        width: 100%; /* Full width */
+        height: auto; /* Auto height */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .AAA {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em; /* Reduced gap */
+        justify-content: center;
+        padding: 1em; /* Reduced padding */
+    }
+
+    .tableReserverBTN {
+        flex: 1 1 calc(50% - 10px); /* Adjusted for smaller screens */
+        max-width: calc(50% - 10px); /* Adjusted for smaller screens */
+        height: 3em;
+        border-radius: 6px;
+        border: none;
+        background-color: #A0A0A0;
+        color: #FFF;
+        font-weight: bold;
+        cursor: not-allowed;
+    }
+
+        .tableReserverBTN:hover {
+            background-color: #A0A0A0;
+            color: #FFF;
+            cursor: not-allowed;
+        }
+
+    .Inputs {
+        width: 100%; /* Full width */
+        padding: 1.5em; /* Reduced padding */
+        background-color: #ffffff;
+        border-radius: 6px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 1em; /* Adjusted gap */
+    }
+
+        .Inputs label {
+            font-size: 12px; /* Reduced font size */
+            font-weight: bold;
+            color: #333;
+        }
+
+        .Inputs input {
+            width: 100%;
+            padding: 8px; /* Reduced padding */
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px; /* Reduced font size */
+            color: #333;
+            transition: 0.3s;
+        }
+
+            .Inputs input:focus {
+                border-color: #6A5A50;
+                outline: none;
+                box-shadow: 0 0 5px rgba(106, 90, 80, 0.5);
+            }
+
+    .MenuBtn {
+        width: 100%; /* Full width */
+        max-width: 100%; /* Full width */
+        margin-top: 1em; /* Reduced margin */
+        background-color: #006622;
+        border-color: #006622;
+        color: #F2E8C6;
+    }
+
+        .MenuBtn:hover {
+            background-color: transparent;
+            color: #006622;
+        }
+
+    .ConfirmBTN {
+        width: 100%; /* Full width */
+        max-width: 100%; /* Full width */
+        margin: 1em auto; /* Reduced margin */
+        display: block;
+        font-size: 0.9em; /* Reduced font size */
+        padding: 0.8em 1.5em; /* Reduced padding */
+        background-color: #006622;
+        border-color: #006622;
+        color: #F2E8C6;
+    }
+
+        .ConfirmBTN:hover {
+            background-color: transparent;
+            color: #006622;
+        }
+
+    .tableBTN {
+        flex: 1 1 calc(50% - 10px); /* Adjusted for smaller screens */
+        max-width: calc(50% - 10px); /* Adjusted for smaller screens */
+        height: 3em;
+        border-radius: 2px;
+        border: none;
+        background-color: #006622;
+        color: #FFF;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+        .tableBTN:hover {
+            background-color: #006622;
+            transform: translateY(-3px);
+        }
+
+    .btnFermer {
+        background-color: #cc0000;
+        border-color: #cc0000;
+        color: #F2E8C6;
+    }
+
+        .btnFermer:hover {
+            background-color: transparent;
+            color: #cc0000;
+        }
+
+    .time {
+        margin-top: 1em; /* Reduced margin */
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em; /* Reduced gap */
+        padding: 0.5em;
+    }
+
+        .time p {
+            font-weight: bold;
+            font-size: 14px; /* Reduced font size */
+            border-bottom: 2px solid black;
+            border-radius: 4px;
+            width: 100%; /* Full width */
+        }
+
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+    }
+
+    .M3, .M2 {
+        background-color: #eee;
+        border: 1px solid rgba(128, 0, 0, 0.1);
+        border-radius: 4px;
+        padding: 1.5em; /* Reduced padding */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        box-shadow: 0 20px 40px rgba(128, 0, 0, 0.05);
+        width: 90%; /* Adjusted width */
+        height: auto; /* Auto height */
+        max-height: 90vh; /* Limit height */
+        overflow-y: auto; /* Add scroll if content overflows */
+    }
+
+    .M3 {
+        width: 90%; /* Adjusted width */
+        height: auto; /* Auto height */
+    }
+
+    .M2 {
+        width: 90%; /* Adjusted width */
+        height: auto; /* Auto height */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .M2 p {
+            font-size: 1.1em; /* Reduced font size */
+            font-weight: 300;
+            color: #800000;
+            line-height: 1.6; /* Adjusted line height */
+            text-align: center;
+        }
+
+    .btnss {
+        display: flex;
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 0.5em; /* Reduced gap */
+        justify-content: center;
+        align-items: center;
+        padding: 0.5em 0; /* Reduced padding */
+    }
+
+    .btnSucc {
+        background-color: #006622;
+        border-color: #006622;
+        color: #F2E8C6;
+    }
+
+        .btnSucc:hover {
+            background-color: transparent;
+            color: #006622;
+        }
+}

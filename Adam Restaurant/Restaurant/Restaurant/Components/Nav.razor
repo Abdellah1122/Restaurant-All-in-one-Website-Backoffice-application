@@ -1,0 +1,33 @@
+﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+<nav>
+    <div class="links">
+        <button @onclick="Navigate">Réservez</button>
+        <button @onclick="() => ScrollToDiv(Ourstory)">À propos de nous</button>
+        <button @onclick="() => ScrollToDiv(FindUS)">Trouvez-nous</button>
+        <button @onclick="() => ScrollToDiv(Footer)">Contactez-nous</button>
+    </div>
+</nav>
+<script>
+    function scrollToElement(className) {
+        const element = document.querySelector('.' + className);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
+@code {
+    private string scrollToClass;
+    private string Ourstory = "OurStory";
+    private string FindUS = "FindUS";
+    private string Footer = "foot";
+    private async Task ScrollToDiv(string className)
+    {
+        scrollToClass = className; // Set the class dynamically
+        await JSRuntime.InvokeVoidAsync("scrollToElement", scrollToClass);
+    }
+    private void Navigate()
+    {
+         Navigation.NavigateTo("/Reserver");
+    }
+}
