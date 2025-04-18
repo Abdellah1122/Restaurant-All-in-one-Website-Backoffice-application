@@ -53,13 +53,13 @@ This digital platform enhances the renowned Adam's Restaurant experience:
 * **Exclusive Experience**: Digital innovation complements the commitment to exceptional dining
 
 ## Project Preview
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.43.24.63.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.11.94.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.53.21.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.46.27.78.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.47.15.62.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.49.34.70.png)
-![Adam's Restaurant](Adam%20Restaurant/Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.51.27.48.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.43.24.63.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.11.94.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.45.53.21.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.46.27.78.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.47.15.62.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.49.34.70.png)
+![Adam's Restaurant](Images%20Project/Desktop%20Screenshot%202025.03.01%20-%2020.51.27.48.png)
 
 ---
 
